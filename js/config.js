@@ -15,7 +15,7 @@ const CONFIG = {
   // http://), consigue solo el token vigente y entrega el audio por https://,
   // así la radio suena aunque el sitio esté publicado con HTTPS.
   // No hace falta tocarlo cuando cambia el token.
-  STREAM_URL: "/api/radio",
+  STREAM_URL: "http://uk24freenew.listen2myradio.com:6831/;stream.mp3",
 
   // Direcciones de respaldo (opcional): se prueban si la principal falla.
   // Las que empiezan con http:// solo se usan si la página NO está en https
