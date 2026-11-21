@@ -1,5 +1,5 @@
 /* Service Worker - Radio JIREH 103.5 FM */
-const CACHE_NAME = 'jireh-pwa-v3';
+const CACHE_NAME = 'jireh-pwa-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -15,7 +15,10 @@ const ASSETS = [
   './assets/img/banner-vivo.svg',
   './assets/img/fondo-cruz.jpg',
   './assets/img/app-icon-192.png',
-  './assets/img/app-icon-512.png'
+  './assets/img/app-icon-512.png',
+  './assets/img/app-icon-maskable-192.png',
+  './assets/img/app-icon-maskable-512.png',
+  './assets/img/apple-touch-icon-180.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -53,6 +56,7 @@ self.addEventListener('fetch', (event) => {
         }
         return res;
       })
-      .catch(() => caches.match(req))
+      // Sin conexión: servir la copia guardada (ignorando ?app=1 del ícono de la app)
+      .catch(() => caches.match(req, { ignoreSearch: true }))
   );
 });

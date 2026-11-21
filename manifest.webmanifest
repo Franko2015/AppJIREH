@@ -3,13 +3,17 @@
   "short_name": "Radio JIREH",
   "description": "RADIO JIREH, 103.5 FM de Formosa, Argentina. Radio cristiana online las 24 horas.",
   "id": "./",
-  "start_url": "./",
+  "start_url": "./?app=1",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#070d1f",
   "theme_color": "#070d1f",
   "lang": "es-AR",
+  "dir": "ltr",
+  "categories": ["music", "entertainment", "lifestyle"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./assets/img/app-icon-192.png",
@@ -22,6 +26,39 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "./assets/img/app-icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/img/app-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Escuchar en vivo",
+      "short_name": "En vivo",
+      "description": "Ir directo al reproductor de la radio",
+      "url": "./?app=1#en-vivo",
+      "icons": [{ "src": "./assets/img/app-icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Versículo del día",
+      "short_name": "Versículo",
+      "url": "./?app=1#versiculo",
+      "icons": [{ "src": "./assets/img/app-icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Clima en Formosa",
+      "short_name": "Clima",
+      "url": "./?app=1#clima",
+      "icons": [{ "src": "./assets/img/app-icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

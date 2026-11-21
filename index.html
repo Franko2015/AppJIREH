@@ -23,7 +23,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Radio JIREH">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/img/app-icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
@@ -422,6 +422,49 @@
       <div class="modal-texto" id="instalarInstrucciones"></div>
     </div>
   </div>
+
+  <!-- ===================== BANNER "INSTALAR APP" (SOLO CELULARES) =========== -->
+  <aside class="banner-app" id="bannerApp" aria-label="Instalar la aplicación" hidden>
+    <img class="banner-app-ico" src="assets/img/app-icon-192.png" alt="" width="52" height="52">
+    <div class="banner-app-texto">
+      <strong>Instalá la app Radio JIREH</strong>
+      <span>Gratis · la radio a un toque</span>
+    </div>
+    <button type="button" class="banner-app-btn" id="bannerAppInstalar">INSTALAR</button>
+    <button type="button" class="banner-app-cerrar" id="bannerAppCerrar" aria-label="Ahora no">✕</button>
+  </aside>
+
+  <!-- ============== BARRA INFERIOR TIPO APP (SOLO CELULARES / TABLETS) ======= -->
+  <nav class="barra-app" id="barraApp" aria-label="Navegación rápida">
+    <a class="barra-app-item" href="#inicio" data-seccion="inicio">
+      <span class="barra-app-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5.5h4V20"/></svg>
+      </span>
+      <span class="barra-app-txt">Inicio</span>
+    </a>
+    <a class="barra-app-item" href="#versiculo" data-seccion="versiculo">
+      <span class="barra-app-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13.5c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Z"/><path d="M12 6.5V20"/></svg>
+      </span>
+      <span class="barra-app-txt">Versículo</span>
+    </a>
+    <button type="button" class="barra-app-play" id="barraAppPlay" aria-label="Reproducir la radio" data-estado="detenido">
+      <span class="barra-app-play-circulo" aria-hidden="true"><span id="barraAppPlayIco">▶</span></span>
+      <span class="barra-app-txt" id="barraAppPlayTxt">Escuchar</span>
+    </button>
+    <a class="barra-app-item" href="#clima" data-seccion="clima">
+      <span class="barra-app-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.5"/><path d="M9 2.5v1.5M2.5 9H4M4.4 4.4l1 1M13.6 4.4l-1 1"/><path d="M8 20h9.5a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.4 1.2A3 3 0 0 0 8 20Z"/></svg>
+      </span>
+      <span class="barra-app-txt">Clima</span>
+    </a>
+    <button type="button" class="barra-app-item" id="barraAppCompartir">
+      <span class="barra-app-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 10.8 7.6-4.1M8.2 13.2l7.6 4.1"/></svg>
+      </span>
+      <span class="barra-app-txt">Compartir</span>
+    </button>
+  </nav>
 
   <!-- ================================ TOAST ================================= -->
   <div class="toast" id="toast" role="status" aria-live="polite" hidden>

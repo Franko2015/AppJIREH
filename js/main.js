@@ -325,6 +325,24 @@
       if (el) { el.textContent = texto; if (modo) { el.setAttribute('data-estado', modo); } else { el.removeAttribute('data-estado'); } }
       var reproductor = $('reproductor');
       if (reproductor) { reproductor.setAttribute('data-estado', modo || (texto === 'EN VIVO' ? 'vivo' : 'detenido')); }
+      pintarBarraApp();
+    }
+    // Botón central de la barra inferior (celulares) + estado en la pantalla de bloqueo
+    function pintarBarraApp() {
+      var modo = estado === 'reproduciendo' ? 'vivo'
+        : (estado === 'conectando' || estado === 'reintentando') ? 'conectando'
+        : estado === 'error' ? 'error' : 'detenido';
+      var btn = $('barraAppPlay');
+      if (btn) {
+        btn.setAttribute('data-estado', modo);
+        btn.setAttribute('aria-label', modo === 'vivo' ? 'Pausar la radio' : modo === 'conectando' ? 'Conectando la radio' : 'Reproducir la radio');
+        var ico = $('barraAppPlayIco'), txt = $('barraAppPlayTxt');
+        if (ico) { ico.textContent = modo === 'vivo' ? 'Ⅱ' : modo === 'conectando' ? '•••' : modo === 'error' ? '↻' : '▶'; }
+        if (txt) { txt.textContent = modo === 'vivo' ? 'En vivo' : modo === 'conectando' ? 'Conectando' : modo === 'error' ? 'Reintentar' : 'Escuchar'; }
+      }
+      if ('mediaSession' in navigator) {
+        try { navigator.mediaSession.playbackState = (modo === 'vivo' || modo === 'conectando') ? 'playing' : 'paused'; } catch (e) {}
+      }
     }
     function pintarBotonPlay(sonando) {
       var btn = $('btnPlay');
@@ -384,6 +402,21 @@
       pararTemporizadores(); try { audio.pause(); } catch (e) {}
       estado = 'detenido'; alAire = false; intentoUrl = 0; reintentosFallidos = 0; segundos = 0; pintarTiempo(); setEstado('DETENIDO'); mostrarReintentar(false); pintarBotonPlay(false);
     }
+    function pausar() {
+      try { audio.pause(); } catch (e) {}
+      estado = 'pausa'; alAire = false; pararTemporizadores(); setEstado('PAUSA', 'conectando'); pintarBotonPlay(false);
+    }
+    function empezar() {
+      if (estado === 'reproduciendo' || estado === 'conectando' || estado === 'reintentando') { return; }
+      intentoUrl = 0; reintentosFallidos = 0; alAire = false; reproducir();
+    }
+    // Botón grande, barra inferior, auriculares y pantalla de bloqueo usan esta misma función
+    function alternar() {
+      if (!audio) { return; }
+      if (estado === 'reproduciendo') { pausar(); return; }
+      if (estado === 'conectando' || estado === 'reintentando') { detener(); return; }
+      empezar();
+    }
     function leerVolumen() { try { var v = parseInt(window.localStorage.getItem(CLAVE_VOLUMEN), 10); if (!isNaN(v) && v >= 0 && v <= 100) { return v; } } catch (e) {} return VOLUMEN_POR_DEFECTO; }
     function guardarVolumen(v) { try { window.localStorage.setItem(CLAVE_VOLUMEN, String(v)); } catch (e) {} }
     function aplicarVolumen(v) { if (audio) { audio.volume = v / 100; } var salida = $('volValor'); if (salida) { salida.textContent = String(v); } var barra = $('volumen'); if (barra) { barra.value = String(v); } }
@@ -403,10 +436,7 @@
       audio.addEventListener('ended', function () { if (estado === 'reproduciendo') { reproducir(); return; } fallo(); });
       audio.addEventListener('stalled', function () { if (estado === 'reproduciendo' || (estado === 'conectando' && alAire)) { estado = 'conectando'; setEstado('CONECTANDO…', 'conectando'); pintarBotonPlay(false); vigilar(); } });
       audio.addEventListener('waiting', function () { if (estado === 'reproduciendo') { estado = 'conectando'; setEstado('CONECTANDO…', 'conectando'); pintarBotonPlay(false); vigilar(); } });
-      $('btnPlay').addEventListener('click', function () {
-        if (estado === 'reproduciendo') { try { audio.pause(); } catch (e) {} estado = 'pausa'; alAire = false; pararTemporizadores(); setEstado('PAUSA', 'conectando'); pintarBotonPlay(false); return; }
-        intentoUrl = 0; reintentosFallidos = 0; reproducir();
-      });
+      $('btnPlay').addEventListener('click', alternar);
       var btnStop = $('btnStop'); if (btnStop) { btnStop.addEventListener('click', detener); }
       $('btnReintentar').addEventListener('click', function () { intentoUrl = 0; reintentosFallidos = 0; alAire = false; estado = 'detenido'; pararTemporizadores(); reproducir(); });
       var vol = $('volumen');
@@ -415,14 +445,68 @@
         try {
           navigator.mediaSession.metadata = new MediaMetadata({
             title: NOMBRE + ' · ' + FRECUENCIA, artist: CFG.UBICACION || 'Formosa · Argentina',
-            artwork: [{ src: 'assets/img/app-icon-512.png', sizes: '512x512', type: 'image/png' }]
+            artwork: [
+              { src: 'assets/img/app-icon-192.png', sizes: '192x192', type: 'image/png' },
+              { src: 'assets/img/app-icon-512.png', sizes: '512x512', type: 'image/png' }
+            ]
           });
         } catch (e) {}
       }
+      // Controles desde la pantalla de bloqueo, la notificación y los auriculares
+      if ('mediaSession' in navigator && navigator.mediaSession.setActionHandler) {
+        var acciones = { play: empezar, pause: pausar, stop: detener };
+        Object.keys(acciones).forEach(function (accion) {
+          try { navigator.mediaSession.setActionHandler(accion, acciones[accion]); } catch (e) {}
+        });
+      }
+      pintarBarraApp();
       pintarTiempo();
     }
-    return { montar: montar };
+    return { montar: montar, alternar: alternar };
   })();
+
+  /* ===== BARRA INFERIOR TIPO APP (CELULARES) ===== */
+  function vibrar() { try { if (navigator.vibrate) { navigator.vibrate(12); } } catch (e) {} }
+  function urlSitio() { return window.location.origin + window.location.pathname; }
+  function compartirRadio() {
+    var url = urlSitio();
+    var texto = 'Escuchá ' + NOMBRE + ' ' + FRECUENCIA + ' en vivo, las 24 horas: alabanza, Palabra y oración.';
+    var whatsapp = 'https://wa.me/?text=' + encodeURIComponent(texto + ' ' + url);
+    if (navigator.share) {
+      navigator.share({ title: NOMBRE + ' · ' + FRECUENCIA, text: texto, url: url }).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(function () { toast('Enlace copiado. ¡Pegalo donde quieras compartirlo!'); })
+        .catch(function () { window.open(whatsapp, '_blank', 'noopener'); });
+      return;
+    }
+    window.open(whatsapp, '_blank', 'noopener');
+  }
+  function montarBarraApp() {
+    var barra = $('barraApp');
+    if (!barra) { return; }
+    var play = $('barraAppPlay');
+    if (play) { play.addEventListener('click', function () { vibrar(); Reproductor.alternar(); }); }
+    var compartir = $('barraAppCompartir');
+    if (compartir) { compartir.addEventListener('click', function () { vibrar(); compartirRadio(); }); }
+    Array.prototype.forEach.call(barra.querySelectorAll('a.barra-app-item'), function (a) { a.addEventListener('click', vibrar); });
+
+    // Marcar la pestaña de la sección que se está viendo
+    if (!('IntersectionObserver' in window)) { return; }
+    var items = {};
+    Array.prototype.forEach.call(barra.querySelectorAll('[data-seccion]'), function (a) { items[a.getAttribute('data-seccion')] = a; });
+    function marcar(id) {
+      Object.keys(items).forEach(function (k) {
+        items[k].classList.toggle('activo', k === id);
+        if (k === id) { items[k].setAttribute('aria-current', 'location'); } else { items[k].removeAttribute('aria-current'); }
+      });
+    }
+    var observador = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) { if (en.isIntersecting) { marcar(en.target.id); } });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('main > section[id]'), function (sec) { observador.observe(sec); });
+  }
 
   function reveal() {
     var elementos = document.querySelectorAll('.reveal');
@@ -596,6 +680,7 @@
     pedirClima();
     var btnClima = $('btnClimaReintentar'); if (btnClima) { btnClima.addEventListener('click', pedirClima); }
     window.setInterval(pedirClima, 15 * 60 * 1000);
+    montarBarraApp();
     instalarApp();
   }
   function asegurarLogos() {
@@ -625,62 +710,128 @@
       });
     }
 
+    var ua = navigator.userAgent || '';
+    var esApp = window.matchMedia('(display-mode: standalone)').matches ||
+      window.matchMedia('(display-mode: minimal-ui)').matches || window.navigator.standalone === true;
+    if (esApp) { document.documentElement.classList.add('es-app'); }
+
     var btn = $('btnInstalarApp');
-    var esIos = /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+    var banner = $('bannerApp');
+    var esIos = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var esIosOtroNavegador = esIos && /CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+    var esSamsung = /SamsungBrowser/i.test(ua);
+    // Navegadores dentro de otras apps (Facebook, Instagram, TikTok…): desde ahí no se puede instalar
+    var esNavegadorInterno = /FBAN|FBAV|FB_IAB|Instagram|Line\/|TikTok|musical_ly|Snapchat|Twitter|; wv\)/i.test(ua);
     var esMovil = esDispositivoMovil();
-    if (!btn || !esMovil || !esContextoSeguro) { return; }
-
-    var eventoInstalacion = null;
-    var yaInstalada = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-    if (yaInstalada) {
-      btn.hidden = true;
+    if (esApp || !esMovil || !esContextoSeguro) {
+      if (btn) { btn.hidden = true; }
+      if (banner) { banner.hidden = true; }
       return;
     }
 
-    btn.hidden = false;
+    var eventoInstalacion = null;
+    var CLAVE_BANNER = 'jireh_banner_app_oculto_hasta';
+
+    function bannerPospuesto() {
+      try { return Date.now() < parseInt(window.localStorage.getItem(CLAVE_BANNER) || '0', 10); } catch (e) { return false; }
+    }
+    function posponerBanner(dias) {
+      try { window.localStorage.setItem(CLAVE_BANNER, String(Date.now() + dias * 86400000)); } catch (e) {}
+    }
+    function mostrarBanner() {
+      if (!banner || bannerPospuesto()) { return; }
+      banner.hidden = false;
+      window.requestAnimationFrame(function () { window.requestAnimationFrame(function () { banner.classList.add('visible'); }); });
+    }
+    function ocultarBanner() {
+      if (!banner || banner.hidden) { return; }
+      banner.classList.remove('visible');
+      window.setTimeout(function () { banner.hidden = true; }, 350);
+    }
+    function yaInstalada() {
+      eventoInstalacion = null;
+      if (btn) { btn.hidden = true; }
+      ocultarBanner();
+    }
+
+    function copiarEnlace() {
+      var url = urlSitio();
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url).then(function () { toast('Enlace copiado. Pegalo en Chrome o Safari.'); })
+          .catch(function () { window.prompt('Copiá este enlace:', url); });
+      } else { window.prompt('Copiá este enlace:', url); }
+    }
+
+    function mostrarInstrucciones() {
+      var cont = $('instalarInstrucciones');
+      if (!cont) { return; }
+      if (esNavegadorInterno) {
+        cont.innerHTML =
+          '<p>Estás viendo la radio dentro de otra aplicación (Facebook, Instagram…), y desde ahí no se puede instalar.</p>' +
+          '<p>1. Tocá los <strong>tres puntos</strong> (⋮ o ⋯) de la esquina.</p>' +
+          '<p>2. Elegí <strong>"Abrir en el navegador"</strong> (Chrome o Safari).</p>' +
+          '<p>3. Ahí tocá <strong>"Instalar app"</strong>.</p>' +
+          '<p><button type="button" class="btn btn-fantasma btn-ancho" id="btnCopiarEnlace">COPIAR ENLACE</button></p>';
+        var copiar = $('btnCopiarEnlace');
+        if (copiar) { copiar.addEventListener('click', copiarEnlace); }
+      } else if (esIos) {
+        cont.innerHTML =
+          '<p>En <strong>iPhone o iPad</strong>:</p>' +
+          (esIosOtroNavegador
+            ? '<p>1. Tocá el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba, junto a la barra de direcciones). Si no aparece, abrí la página en <strong>Safari</strong>.</p>'
+            : '<p>1. Tocá el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba, en la barra de abajo).</p>') +
+          '<p>2. Deslizá hacia abajo y elegí <strong>"Agregar a inicio"</strong>.</p>' +
+          '<p>3. Confirmá tocando <strong>"Agregar"</strong>. ¡Listo! La radio aparece en tu pantalla de inicio como una app.</p>';
+      } else if (esSamsung) {
+        cont.innerHTML =
+          '<p>En <strong>Samsung Internet</strong>:</p>' +
+          '<p>1. Tocá el ícono de <strong>instalar</strong> en la barra de direcciones, o el menú <strong>≡</strong> abajo a la derecha.</p>' +
+          '<p>2. Elegí <strong>"Agregar página a" → "Pantalla de inicio"</strong>.</p>';
+      } else {
+        cont.innerHTML =
+          '<p>Para instalar la radio como app en tu teléfono:</p>' +
+          '<p>1. Abrí el menú de tu navegador (los <strong>tres puntos ⋮</strong> arriba a la derecha).</p>' +
+          '<p>2. Elegí <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>' +
+          '<p>3. Confirmá con <strong>"Instalar"</strong>. La radio queda en tu pantalla de inicio como una app más.</p>';
+      }
+      abrirModal($('modalInstalar'));
+    }
+
+    function pedirInstalacion() {
+      vibrar();
+      if (eventoInstalacion) {
+        // Chrome / Edge / Samsung en Android: ventana de instalación del propio teléfono
+        var ev = eventoInstalacion;
+        eventoInstalacion = null;
+        ev.prompt();
+        ev.userChoice.then(function (res) {
+          if (res && res.outcome === 'accepted') { yaInstalada(); }
+          else { ocultarBanner(); posponerBanner(3); }
+        }).catch(function () {});
+        return;
+      }
+      ocultarBanner();
+      mostrarInstrucciones();
+    }
+
+    if (btn) { btn.hidden = false; btn.addEventListener('click', pedirInstalacion); }
+    var bannerBtn = $('bannerAppInstalar');
+    if (bannerBtn) { bannerBtn.addEventListener('click', pedirInstalacion); }
+    var bannerCerrar = $('bannerAppCerrar');
+    if (bannerCerrar) { bannerCerrar.addEventListener('click', function () { ocultarBanner(); posponerBanner(7); }); }
 
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       eventoInstalacion = e;
-      btn.hidden = false;
+      if (btn) { btn.hidden = false; }
     });
-
     window.addEventListener('appinstalled', function () {
-      eventoInstalacion = null;
-      btn.hidden = true;
-      toast('¡Aplicación instalada en tu dispositivo!');
+      yaInstalada();
+      toast('¡Listo! Radio JIREH quedó instalada en tu teléfono.');
     });
 
-    btn.addEventListener('click', function () {
-      if (eventoInstalacion) {
-        eventoInstalacion.prompt();
-        eventoInstalacion.userChoice.then(function (res) {
-          if (res && res.outcome === 'accepted') {
-            btn.hidden = true;
-          }
-          eventoInstalacion = null;
-        });
-        return;
-      }
-
-      var cont = $('instalarInstrucciones');
-      if (cont) {
-        if (esIos) {
-          cont.innerHTML =
-            '<p>En <strong>iPhone o iPad (Safari)</strong>:</p>' +
-            '<p>1. Tocá el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba en la barra inferior).</p>' +
-            '<p>2. Deslizá hacia abajo y elegí <strong>"Agregar a inicio"</strong>.</p>' +
-            '<p>3. Confirmá tocando <strong>"Agregar"</strong> arriba a la derecha.</p>';
-        } else {
-          cont.innerHTML =
-            '<p>Para instalar la radio como app en tu teléfono:</p>' +
-            '<p>1. Abrí el menú de tu navegador (los <strong>tres puntos ⋮</strong> arriba a la derecha).</p>' +
-            '<p>2. Seleccioná <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>';
-        }
-        abrirModal($('modalInstalar'));
-      }
-    });
+    // El banner aparece unos segundos después de entrar, para no tapar la bienvenida
+    window.setTimeout(mostrarBanner, 3500);
   }
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', iniciar); } else { iniciar(); }
 })();
