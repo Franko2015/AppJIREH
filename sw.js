@@ -1,5 +1,5 @@
 /* Service Worker - Radio JIREH 103.5 FM */
-const CACHE_NAME = 'jireh-pwa-v4';
+const CACHE_NAME = 'jireh-pwa-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -44,8 +44,6 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   // No cachear streams de audio ni APIs externas
   if (url.origin !== self.location.origin) return;
-  // El puente de audio /api/radio es una transmisión sin fin: nunca pasarla por la caché
-  if (url.pathname.indexOf('/api/') === 0) return;
 
   event.respondWith(
     fetch(req)

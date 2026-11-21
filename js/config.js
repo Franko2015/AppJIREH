@@ -10,18 +10,11 @@
    ===================================================================== */
 
 const CONFIG = {
-  // Señal de la radio. "/api/radio" es el puente HTTPS que está en
-  // api/radio.js: se conecta al servidor de MyRadioStream (que solo da
-  // http://), consigue solo el token vigente y entrega el audio por https://,
-  // así la radio suena aunque el sitio esté publicado con HTTPS.
-  // No hace falta tocarlo cuando cambia el token.
+  // Link directo de la señal de la radio (servidor y puerto).
   STREAM_URL: "http://uk25freenew.listen2myradio.com:14851/;stream.mp3",
 
   // Direcciones de respaldo (opcional): se prueban si la principal falla.
-  // Las que empiezan con http:// solo se usan si la página NO está en https
-  // (por ejemplo, al abrirla desde la computadora), porque el navegador las
-  // bloquea en un sitio https.
-  STREAM_FALLBACKS: ["http://5.135.154.66:40600/;"],
+  STREAM_FALLBACKS: [],
 
   // Página oficial del reproductor de la radio (se muestra en Contacto).
   PAGINA_RADIO: "http://jireh11035.on-air.fm",

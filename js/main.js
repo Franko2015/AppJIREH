@@ -305,13 +305,8 @@
       var principal = CFG.STREAM_URL || '';
       var extras = Array.isArray(CFG.STREAM_FALLBACKS) ? CFG.STREAM_FALLBACKS : [];
       var lista = [];
-      var protocolo = window.location.protocol;
       function agregarUrl(url) {
         if (!url) { return; }
-        // En un sitio https el navegador bloquea el audio http:// (contenido mixto): se usa el puente /api/radio.
-        if (protocolo === 'https:' && /^http:\/\//i.test(url)) { return; }
-        // Abierta como archivo local no existe el puente /api/radio.
-        if (protocolo === 'file:' && url.charAt(0) === '/') { return; }
         if (lista.indexOf(url) === -1) { lista.push(url); }
       }
       agregarUrl(principal);
@@ -432,7 +427,7 @@
       audio.addEventListener('canplay', function () { if (estado === 'conectando' && !audio.paused) { ok(); } });
       audio.addEventListener('timeupdate', function () { if (estado === 'conectando' && !audio.paused) { ok(); } });
       audio.addEventListener('error', fallo);
-      // El puente /api/radio corta cada ~5 minutos (límite de Vercel): si estaba sonando, reconectar enseguida.
+      // Si la señal se corta mientras estaba sonando, reconectar enseguida.
       audio.addEventListener('ended', function () { if (estado === 'reproduciendo') { reproducir(); return; } fallo(); });
       audio.addEventListener('stalled', function () { if (estado === 'reproduciendo' || (estado === 'conectando' && alAire)) { estado = 'conectando'; setEstado('CONECTANDO…', 'conectando'); pintarBotonPlay(false); vigilar(); } });
       audio.addEventListener('waiting', function () { if (estado === 'reproduciendo') { estado = 'conectando'; setEstado('CONECTANDO…', 'conectando'); pintarBotonPlay(false); vigilar(); } });

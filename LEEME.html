@@ -38,17 +38,11 @@
 
   <h2>2. Cómo funciona la señal</h2>
   <div class="caja">
-    <p>El servidor de la radio (MyRadioStream, <code>s41.myradiostream.com</code>, puerto <code>40600</code>) solo entrega
-      el audio por <code>http://</code>, y además exige un token que cambia todo el tiempo. Como el sitio se publica con
-      <code>https://</code>, el navegador bloquearía ese audio.</p>
-    <p>Por eso el reproductor usa el <strong>puente</strong> <code>/api/radio</code> (archivo <code>api/radio.js</code>):
-      una función de Vercel que lee el token vigente de la página oficial, se conecta al servidor de la radio y
-      reenvía el audio por <code>https://</code>. No hay que actualizar el token a mano.</p>
-    <p>Vercel corta cada conexión a los 5 minutos; el reproductor se reconecta solo (puede notarse un microcorte).</p>
-    <p>Si la radio no está transmitiendo (el programa de emisión está apagado), el reproductor muestra
-      «SEÑAL NO DISPONIBLE».</p>
-    <p>Abriendo <code>index.html</code> desde la computadora (sin Vercel) el puente no existe y se usa la dirección
-      directa de <code>STREAM_FALLBACKS</code>.</p>
+    <p>El reproductor toma el audio directamente del link que está en <code>STREAM_URL</code> dentro de
+      <code>js/config.js</code>. Para cambiar la señal, pegá ahí el nuevo link.</p>
+    <p><strong>Importante:</strong> si el sitio está publicado con <code>https://</code> (como en Vercel) y el link empieza
+      con <code>http://</code>, Chrome, Safari y la mayoría de los navegadores bloquean el audio. Para que suene en el
+      sitio publicado, el link tiene que empezar con <code>https://</code>.</p>
   </div>
 
   <h2>App para celulares</h2>
