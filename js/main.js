@@ -305,14 +305,23 @@
       var principal = CFG.STREAM_URL || '';
       var extras = Array.isArray(CFG.STREAM_FALLBACKS) ? CFG.STREAM_FALLBACKS : [];
       var lista = [];
+      var protocolo = window.location.protocol;
+      function sumar(url) { if (url && lista.indexOf(url) === -1) { lista.push(url); } }
       function agregarUrl(url) {
         if (!url) { return; }
-        if (lista.indexOf(url) === -1) { lista.push(url); }
+        // Abierta como archivo local (doble clic) no existe el puente /api/radio.
+        if (protocolo === 'file:' && url.charAt(0) === '/') { return; }
+        // En un sitio https el navegador convierte el audio http:// en https:// y el servidor de la
+        // radio no lo acepta: primero se pide por el puente /api/radio (https, mismo dominio).
+        if (protocolo === 'https:' && /^http:\/\//i.test(url)) { sumar('/api/radio?u=' + encodeURIComponent(url)); }
+        sumar(url);
       }
       agregarUrl(principal);
       for (var k = 0; k < extras.length; k++) {
         agregarUrl(extras[k]);
       }
+      // Último recurso en el sitio publicado: el puente prueba la señal principal y la de MyRadioStream.
+      if (protocolo === 'https:') { sumar('/api/radio'); }
       return lista;
     }
     function setEstado(texto, modo) {
