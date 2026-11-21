@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEEME · Radio JIREH</title>
+<style>
+  :root{--oro:#f3cf7a;--fondo:#050a1a;--caja:#14254f;--texto:#e6ecf7}
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0a1430,var(--fondo));color:var(--texto);
+    font-family:'Segoe UI',Roboto,Arial,sans-serif;line-height:1.7;font-size:17px}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 16px 70px}
+  h1{color:var(--oro);text-align:center;font-family:Georgia,serif;letter-spacing:.06em}
+  h2{color:#fff;border-left:5px solid var(--oro);padding:8px 12px;margin-top:36px;background:rgba(243,207,122,.08);border-radius:0 10px 10px 0}
+  .caja{background:var(--caja);border:1px solid rgba(243,207,122,.35);border-radius:14px;padding:16px 20px;margin:14px 0}
+  code{background:#02050f;color:var(--oro);padding:2px 7px;border-radius:6px;word-break:break-all}
+  li{margin:8px 0}
+  a{color:#8fb4ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>RADIO JIREH · 103.5 FM</h1>
+  <p style="text-align:center">Formosa · Argentina — instrucciones de la página</p>
+
+  <h2>1. Qué cambiar y dónde</h2>
+  <div class="caja">
+    <p>Casi todo se cambia en <code>js/config.js</code>:</p>
+    <ul>
+      <li><code>WHATSAPP</code>: número para pedidos de oración, con código de país y sin espacios (ej: <code>5493704123456</code>). Si queda vacío y tampoco hay <code>CORREO_ORACION</code>, la sección de oración no se muestra.</li>
+      <li><code>REDES</code>: direcciones de Facebook, Instagram, YouTube y TikTok. Las vacías no aparecen.</li>
+      <li><code>NEWSLETTER_EMAIL</code>: correo para suscripciones. Vacío = sección oculta.</li>
+      <li><code>ADMIN_CLAVE</code>: contraseña del "Área de la radio" (pie de página). Por defecto: <code>jireh2026</code>.</li>
+      <li><code>CLIMA_LAT</code> / <code>CLIMA_LON</code>: coordenadas del clima (ya configuradas para la ciudad de Formosa).</li>
+    </ul>
+    <p>Los versículos del día (uno por cada día del mes) están en <code>js/data.js</code>.</p>
+  </div>
+
+  <h2>2. Cómo funciona la señal</h2>
+  <div class="caja">
+    <p>El servidor de la radio (MyRadioStream, <code>s41.myradiostream.com</code>, puerto <code>40600</code>) solo entrega
+      el audio por <code>http://</code>, y además exige un token que cambia todo el tiempo. Como el sitio se publica con
+      <code>https://</code>, el navegador bloquearía ese audio.</p>
+    <p>Por eso el reproductor usa el <strong>puente</strong> <code>/api/radio</code> (archivo <code>api/radio.js</code>):
+      una función de Vercel que lee el token vigente de la página oficial, se conecta al servidor de la radio y
+      reenvía el audio por <code>https://</code>. No hay que actualizar el token a mano.</p>
+    <p>Vercel corta cada conexión a los 5 minutos; el reproductor se reconecta solo (puede notarse un microcorte).</p>
+    <p>Si la radio no está transmitiendo (el programa de emisión está apagado), el reproductor muestra
+      «SEÑAL NO DISPONIBLE».</p>
+    <p>Abriendo <code>index.html</code> desde la computadora (sin Vercel) el puente no existe y se usa la dirección
+      directa de <code>STREAM_FALLBACKS</code>.</p>
+  </div>
+
+  <h2>3. Publicar</h2>
+  <div class="caja">
+    <ol>
+      <li>Subí esta carpeta a un repositorio de GitHub.</li>
+      <li>En <a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a>, importá el repositorio y tocá <strong>Deploy</strong>.</li>
+      <li>Cada vez que cambies un archivo y lo subas, Vercel publica la nueva versión sola.</li>
+    </ol>
+  </div>
+</div>
+</body>
+</html>

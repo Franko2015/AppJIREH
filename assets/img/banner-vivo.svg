@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420"><title>Radio JIREH 103.5 FM · Jehová proveerá</title>
+<defs><linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050b1f"/><stop offset="1" stop-color="#1b2f5e"/></linearGradient><radialGradient id="l" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff3c9" stop-opacity=".9"/><stop offset=".4" stop-color="#f3cf7a" stop-opacity=".35"/><stop offset="1" stop-color="#f3cf7a" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="420" fill="url(#c)"/>
+<g fill="#fff" opacity=".7"><circle cx="80" cy="50" r="1.5"/><circle cx="260" cy="110" r="1"/><circle cx="420" cy="40" r="1.4"/><circle cx="800" cy="60" r="1.2"/><circle cx="980" cy="120" r="1.6"/><circle cx="1120" cy="50" r="1"/></g>
+<circle cx="220" cy="210" r="190" fill="url(#l)"/>
+<g stroke="#f3cf7a" stroke-opacity=".35" stroke-width="2"><path d="M220 190L60 420M220 190L160 420M220 190L280 420M220 190L380 420"/></g>
+<rect x="210" y="110" width="20" height="160" rx="3" fill="#fff6dc"/><rect x="170" y="150" width="100" height="18" rx="3" fill="#fff6dc"/>
+<path d="M0 360Q300 320 600 350T1200 340V420H0Z" fill="#070e24"/>
+<text x="760" y="190" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="92" fill="#f3cf7a" letter-spacing="6">JIREH</text>
+<text x="760" y="250" text-anchor="middle" font-family="Georgia,serif" font-size="34" fill="#fff6dc" letter-spacing="4">103.5 FM · FORMOSA</text>
+<text x="760" y="305" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="28" fill="#c9d6f0">«Jehová proveerá» · Génesis 22:14</text>
+</svg>

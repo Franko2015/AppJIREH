@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RADIO JIREH · 103.5 FM · Formosa, Argentina</title>
+  <meta name="description"
+    content="RADIO JIREH, 103.5 FM de Formosa, Argentina. Radio cristiana online las 24 horas: alabanza, Palabra de Dios, oración y el versículo del día. «Jehová proveerá» (Génesis 22:14).">
+  <meta name="theme-color" content="#070d1f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RADIO JIREH · 103.5 FM · Formosa">
+  <meta property="og:description" content="Radio cristiana online 24 horas · Alabanza, Palabra y oración · «Jehová proveerá»">
+  <meta property="og:image" content="assets/img/og-jireh.jpg">
+  <meta property="og:locale" content="es_AR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RADIO JIREH · 103.5 FM">
+  <meta name="twitter:description" content="Radio cristiana online 24 horas desde Formosa, Argentina">
+  <meta name="twitter:image" content="assets/img/og-jireh.jpg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Radio JIREH">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/app-icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <a class="saltar" href="#contenido">Ir al contenido principal</a>
+
+  <!-- ============================ BARRA SUPERIOR ============================ -->
+  <div class="barra-superior" id="barraSuperior">
+    <div class="barra-inner">
+      <div class="barra-bloque reloj-bloque">
+        <span class="reloj" id="reloj">00:00:00</span>
+        <span class="fecha" id="fechaLarga">—</span>
+      </div>
+
+      <div class="barra-bloque badge-frec" aria-label="Frecuencia 103.5 FM">
+        <span class="badge-fm">103.5 FM</span>
+        <span class="ubicacion">Formosa · Argentina</span>
+      </div>
+
+      <a class="barra-bloque clima-mini" id="climaMini" href="#clima" aria-label="Ver el clima actual de Formosa"
+        title="Clima actual en Formosa">
+        <span class="clima-mini-ico" id="climaMiniIco" aria-hidden="true">◑</span>
+        <span class="clima-mini-temp" id="climaMiniTemp">--°</span>
+      </a>
+
+      <div class="barra-bloque visitas-bloque" title="Visitas contadas en este equipo">
+        <span class="visitas-etiqueta">VISITAS DE ESTE EQUIPO</span>
+        <span class="odometro" id="odometroBarra" data-odometro="1">000000</span>
+      </div>
+    </div>
+  </div>
+
+  <main id="contenido">
+    <!-- ================================ HERO ================================= -->
+    <section class="hero" id="inicio" aria-labelledby="inicio-titulo">
+      <div class="hero-fondo" aria-hidden="true"></div>
+      <canvas class="hero-canvas" id="particulas" aria-hidden="true"></canvas>
+
+      <div class="hero-contenido hero-layout">
+        <div class="hero-copy">
+          <p class="hero-kicker reveal">RADIO CRISTIANA · <span class="badge-vivo"><i></i>EN VIVO 24 H</span></p>
+          <h1 class="hero-titulo reveal" id="inicio-titulo">
+            <span class="hero-titulo-pre">Radio</span>
+            <span class="dorado">JIREH</span>
+          </h1>
+          <p class="hero-frec reveal">103.5 FM · Formosa · Argentina</p>
+          <blockquote class="hero-cita reveal">
+            <p>«Jehová proveerá»</p>
+            <cite>Génesis 22:14</cite>
+          </blockquote>
+          <p class="hero-frase reveal">Alabanza, Palabra de Dios y oración para acompañar a cada familia, en cada
+            momento del día.</p>
+          <div class="hero-acciones reveal">
+            <a class="btn btn-fantasma" href="#versiculo">VERSÍCULO DEL DÍA</a>
+            <button type="button" class="btn btn-instalar" id="btnInstalarApp" hidden>📲 INSTALAR APP</button>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" aria-hidden="true">
+          <div class="vitral">
+            <img src="assets/img/fondo-cruz.jpg" alt="" width="685" height="1600" loading="eager">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== EN VIVO ================================ -->
+    <section class="seccion seccion-vivo" id="en-vivo" aria-labelledby="en-vivo-titulo">
+      <div class="contenedor">
+        <div class="vivo-panel reveal">
+          <div class="vivo-copy">
+            <span class="seccion-lema">Transmisión en directo</span>
+            <h2 class="seccion-titulo" id="en-vivo-titulo">EN VIVO · 103.5 FM</h2>
+            <p>Desde Formosa para todo el mundo. Tocá el botón y escuchá la radio donde estés.</p>
+          </div>
+
+          <div class="reproductor" id="reproductor" data-estado="detenido">
+            <button type="button" class="btn-play" id="btnPlay" aria-label="Reproducir la radio">
+              <span class="btn-play-aro" aria-hidden="true"></span>
+              <span class="btn-play-ico" id="iconoPlay" aria-hidden="true">▶</span>
+              <span class="btn-play-txt" id="textoPlay">ESCUCHAR</span>
+            </button>
+            <div class="repro-estado">
+              <span class="repro-led" aria-hidden="true"></span>
+              <span class="lcd-estado" id="estadoRepro" role="status" aria-live="polite">DETENIDO</span>
+              <span class="repro-tiempo" id="tiempoRepro">00:00</span>
+            </div>
+            <div class="repro-volumen">
+              <label class="vol-etiqueta" for="volumen">VOLUMEN</label>
+              <input type="range" id="volumen" min="0" max="100" value="80" step="1" aria-label="Volumen">
+              <output class="vol-valor" id="volValor" for="volumen">80</output>
+            </div>
+            <button type="button" class="btn btn-fantasma btn-reintentar" id="btnReintentar" hidden>↻ REINTENTAR</button>
+            <audio id="radioAudio" preload="none"></audio>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== VERSÍCULO DEL DÍA ========================= -->
+    <section class="seccion seccion-versiculo" id="versiculo" aria-labelledby="versiculo-titulo">
+      <div class="contenedor contenedor-estrecho">
+        <header class="seccion-cabecera reveal">
+          <span class="seccion-lema">Pan para el alma</span>
+          <h2 class="seccion-titulo" id="versiculo-titulo">VERSÍCULO DEL DÍA</h2>
+          <span class="separador"></span>
+        </header>
+
+        <figure class="versiculo-card reveal">
+          <span class="versiculo-comillas" aria-hidden="true">✝</span>
+          <blockquote class="versiculo-texto" id="versiculoTexto">«Jehová es mi pastor; nada me faltará.»</blockquote>
+          <figcaption class="versiculo-cita" id="versiculoCita">Salmos 23:1 · RVR1960</figcaption>
+          <button type="button" class="btn btn-dorado" id="btnCompartirVersiculo">COMPARTIR VERSÍCULO</button>
+        </figure>
+
+        <div class="nombre-card reveal">
+          <h3>¿Por qué JIREH?</h3>
+          <p><strong>Jireh</strong> es una palabra hebrea que aparece en Génesis 22:14. Abraham llamó así al monte donde
+            Dios le dio lo que necesitaba en el momento justo: <em>Jehová Jireh</em>, «el Señor proveerá». Creemos que
+            Dios sigue viendo cada necesidad de cada hogar de Formosa, y que ya tiene preparada la respuesta.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== PEDIDOS DE ORACIÓN ======================== -->
+    <section class="seccion seccion-oracion" id="oracion" aria-labelledby="oracion-titulo">
+      <div class="contenedor contenedor-estrecho">
+        <header class="seccion-cabecera reveal">
+          <span class="seccion-lema">Oramos con vos</span>
+          <h2 class="seccion-titulo" id="oracion-titulo">PEDIDOS DE ORACIÓN</h2>
+          <p class="seccion-bajada">«Orad unos por otros» (Santiago 5:16). Dejanos tu pedido y lo vamos a presentar
+            en oración.</p>
+          <span class="separador"></span>
+        </header>
+
+        <form class="news-form reveal" id="formOracion" novalidate>
+          <div class="campo">
+            <label for="oracionNombre">Nombre <span class="opcional">(opcional)</span></label>
+            <input type="text" id="oracionNombre" name="nombre" autocomplete="given-name" placeholder="Cómo te llamás">
+          </div>
+          <div class="campo">
+            <label for="oracionPedido">Tu pedido *</label>
+            <textarea id="oracionPedido" name="pedido" rows="4" required aria-describedby="oracionError"
+              placeholder="Contanos por qué querés que oremos"></textarea>
+            <p class="error-campo" id="oracionError" role="alert" hidden></p>
+          </div>
+          <button class="btn btn-dorado btn-ancho" type="submit" id="btnOracion">ENVIAR PEDIDO</button>
+          <p class="privacidad" id="oracionNota"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================================= CLIMA =============================== -->
+    <section class="seccion seccion-clima" id="clima" aria-labelledby="clima-titulo">
+      <div class="contenedor">
+        <header class="seccion-cabecera reveal">
+          <span class="seccion-lema">Condiciones actuales · Formosa</span>
+          <h2 class="seccion-titulo" id="clima-titulo">CLIMA DE FORMOSA</h2>
+          <span class="separador"></span>
+        </header>
+
+        <div class="clima-card reveal" id="climaCard">
+          <div class="clima-estado" id="climaEstado" role="status" aria-live="polite">Cargando el clima…</div>
+          <div class="clima-principal" id="climaPrincipal" hidden>
+            <div class="clima-ico" id="climaIco" aria-hidden="true"></div>
+            <div class="clima-numeros">
+              <div class="clima-temp" id="climaTemp">--°</div>
+              <div class="clima-sens" id="climaSens">Sensación --°</div>
+              <div class="clima-desc" id="climaDesc">—</div>
+            </div>
+            <ul class="clima-datos" id="climaDatos">
+              <li><span>Humedad</span><strong id="climaHumedad">--%</strong></li>
+              <li><span>Viento</span><strong id="climaViento">-- km/h</strong></li>
+              <li><span>Ubicación</span><strong>Formosa · AR</strong></li>
+            </ul>
+          </div>
+          <p class="clima-actualizado" id="climaActualizado" hidden></p>
+          <div class="clima-dias" id="climaDias" hidden></div>
+          <p class="clima-fuente">Fuente: <a href="https://wttr.in/Formosa,Argentina" target="_blank"
+              rel="noopener noreferrer">wttr.in / WorldWeatherOnline</a>.</p>
+          <button type="button" class="btn btn-fantasma" id="btnClimaReintentar" hidden>Reintentar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== NEWSLETTER ============================== -->
+    <section class="seccion seccion-news" id="newsletter" aria-labelledby="newsletter-titulo">
+      <div class="contenedor contenedor-estrecho">
+        <header class="seccion-cabecera reveal">
+          <span class="seccion-lema">Mantenete conectado</span>
+          <h2 class="seccion-titulo" id="newsletter-titulo">NEWSLETTER</h2>
+          <p class="seccion-bajada">Recibí las novedades de la radio, la programación especial y los eventos de la
+            iglesia.</p>
+          <span class="separador"></span>
+        </header>
+
+        <form class="news-form reveal" id="formNews" novalidate>
+          <div class="campo">
+            <label for="newsNombre">Nombre <span class="opcional">(opcional)</span></label>
+            <input type="text" id="newsNombre" name="nombre" autocomplete="given-name" placeholder="Cómo te llamás">
+          </div>
+          <div class="campo">
+            <label for="newsEmail">Correo electrónico *</label>
+            <input type="email" id="newsEmail" name="email" autocomplete="email" placeholder="tucorreo@ejemplo.com"
+              required aria-describedby="newsError">
+            <p class="error-campo" id="newsError" role="alert" hidden></p>
+          </div>
+          <button class="btn btn-dorado btn-ancho" type="submit">QUIERO SUMARME</button>
+          <p class="privacidad">
+            <strong>Privacidad:</strong> al enviar, se abre tu programa de correo con el mensaje
+            para la radio (no se envía a ningún servidor ni a terceros); además la suscripción
+            queda guardada en este equipo, dentro de la lista del panel. Podés pedir que la
+            saquemos cuando quieras escribiéndonos.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- =============================== CONTACTO ============================== -->
+    <section class="seccion seccion-contacto" id="contacto" aria-labelledby="contacto-titulo">
+      <div class="contenedor">
+        <header class="seccion-cabecera reveal">
+          <span class="seccion-lema">Siempre en el aire</span>
+          <h2 class="seccion-titulo" id="contacto-titulo">CONTACTO</h2>
+          <span class="separador"></span>
+        </header>
+
+        <div class="contacto-grid reveal">
+          <div class="contacto-dato">
+            <h3>Frecuencia</h3>
+            <p>103.5 FM<br>Formosa · Argentina</p>
+          </div>
+          <div class="contacto-dato">
+            <h3>En el aire</h3>
+            <p>ONLINE LAS 24 HORAS<br>«Jehová proveerá»</p>
+          </div>
+          <div class="contacto-dato">
+            <h3>Seguinos</h3>
+            <p class="redes" id="listaRedes"><!-- generado por main.js desde config.js --></p>
+          </div>
+        </div>
+
+        <img class="banner-vivo reveal" src="assets/img/banner-vivo.svg"
+          alt="Cruz iluminada: Radio JIREH 103.5 FM Formosa · «Jehová proveerá», Génesis 22:14" width="1200"
+          height="420" loading="lazy">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================ FOOTER =============================== -->
+  <footer class="pie">
+    <div class="contenedor pie-inner">
+      <div class="pie-marca">
+        <img src="logo-radio.jpg" alt="Logo de Radio JIREH: cruz de luz en el cielo" width="90" height="90"
+          loading="lazy">
+        <div>
+          <strong>RADIO JIREH</strong>
+          <span>103.5 FM · FORMOSA · ARGENTINA</span>
+          <span class="pie-tagline">«JEHOVÁ PROVEERÁ»</span>
+        </div>
+      </div>
+
+      <div class="pie-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#en-vivo">En vivo</a>
+        <a href="#versiculo">Versículo</a>
+        <a href="#oracion">Oración</a>
+        <a href="#clima">Clima</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="#contacto">Contacto</a>
+        <a href="#" id="linkAdmin" class="pie-admin">Área de la radio</a>
+      </div>
+
+      <div class="pie-visitas">
+        <span>VISITAS (ESTE EQUIPO)</span>
+        <span class="odometro" id="odometroPie" data-odometro="1">000000</span>
+      </div>
+    </div>
+    <div class="pie-legal">
+      <p>© 2026 RADIO JIREH · 103.5 FM · Formosa, Argentina. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ============================ MODAL ÁREA DE LA RADIO ==================== -->
+  <div class="modal modal-admin" id="modalAdmin" role="dialog" aria-modal="true" aria-labelledby="adminTitulo" hidden>
+    <div class="modal-fondo" data-cerrar></div>
+    <div class="modal-caja modal-caja-ancho" role="document">
+      <button class="modal-cerrar" type="button" data-cerrar aria-label="Cerrar el panel">✕</button>
+
+      <!-- Paso 1: contraseña -->
+      <div id="adminLogin">
+        <h3 class="modal-titulo" id="adminTitulo">Área de la radio</h3>
+        <p class="admin-sut">Ingresá la contraseña del dueño para administrar la página.</p>
+        <form id="formLogin" novalidate>
+          <div class="campo">
+            <label for="adminClave">Contraseña</label>
+            <input type="password" id="adminClave" autocomplete="current-password" required>
+            <p class="error-campo" id="adminError" role="alert" hidden>La contraseña no coincide. Probá de nuevo.</p>
+          </div>
+          <button class="btn btn-dorado btn-ancho" type="submit">ENTRAR</button>
+        </form>
+      </div>
+
+      <!-- Paso 2: panel -->
+      <div id="adminPanel" hidden>
+        <h3 class="modal-titulo">Panel de administración</h3>
+
+        <div class="admin-resumen">
+          <div class="admin-stat"><span>Visitas (equipo)</span><strong id="adminVisitas">0</strong></div>
+          <div class="admin-stat"><span>Suscriptores</span><strong id="adminSuscriptores">0</strong></div>
+        </div>
+
+        <div class="admin-tabs" id="adminTabs" role="tablist">
+          <button type="button" class="admin-tab activo" data-atab="suscriptores">Suscriptores</button>
+          <button type="button" class="admin-tab" data-atab="ajustes">Ajustes</button>
+        </div>
+
+        <!-- Suscriptores -->
+        <section class="admin-pane" id="paneSuscriptores">
+          <p class="admin-sut">Suscriptores guardados en este equipo (localStorage <code>jireh_suscriptores</code>).
+            Se cargan desde la sección Newsletter, que en la página sólo aparece si está configurado
+            <code>NEWSLETTER_EMAIL</code> en <code>js/config.js</code>.
+          </p>
+          <div class="admin-tabla-env">
+            <table class="admin-tabla" id="tablaSuscriptores">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="admin-botones">
+            <button class="btn btn-dorado" type="button" id="btnCsv">Exportar CSV</button>
+            <button class="btn btn-fantasma" type="button" id="btnVaciar">Vaciar lista</button>
+          </div>
+          <p class="admin-msg" id="msgSuscriptores" role="status"></p>
+        </section>
+
+        <!-- Ajustes -->
+        <section class="admin-pane" id="paneAjustes" hidden>
+          <div class="admin-bloque">
+            <h4>Cambiar contraseña</h4>
+            <div class="admin-campo-fila">
+              <div class="admin-campo"><label for="claveNueva">Nueva contraseña</label><input type="password"
+                  id="claveNueva"></div>
+              <div class="admin-campo"><label for="claveRepetir">Repetir</label><input type="password"
+                  id="claveRepetir"></div>
+            </div>
+            <div class="admin-botones"><button class="btn btn-dorado" type="button" id="btnClave">Guardar
+                contraseña</button></div>
+            <p class="admin-msg" id="msgClave" role="status"></p>
+          </div>
+
+          <div class="admin-bloque">
+            <h4>Datos de la radio</h4>
+            <p class="admin-sut">El WhatsApp para pedidos de oración, las redes sociales y el correo del
+              newsletter se cambian en <code>js/config.js</code>. Los versículos del día están en
+              <code>js/data.js</code>.</p>
+          </div>
+
+          <div class="admin-bloque">
+            <h4>Visitas</h4>
+            <p class="admin-sut">Contador local: se cuentan las visitas de este equipo/navegador.
+              No es un conteo global del sitio. Van <strong id="adminVisitas2">0</strong> en este equipo.</p>
+          </div>
+        </section>
+
+        <div class="admin-salir">
+          <button class="btn btn-fantasma" type="button" id="btnSalirAdmin">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ MODAL INSTALAR APP (iOS / MANUAL) ========= -->
+  <div class="modal" id="modalInstalar" role="dialog" aria-modal="true" aria-labelledby="instalarTitulo" hidden>
+    <div class="modal-fondo" data-cerrar></div>
+    <div class="modal-caja" role="document">
+      <button class="modal-cerrar" type="button" data-cerrar aria-label="Cerrar instrucciones">✕</button>
+      <div class="modal-cab">
+        <span class="modal-cat">APP MÓVIL</span>
+        <span class="modal-fecha">103.5 FM</span>
+      </div>
+      <h3 class="modal-titulo" id="instalarTitulo">Instalar en tu teléfono</h3>
+      <div class="modal-texto" id="instalarInstrucciones"></div>
+    </div>
+  </div>
+
+  <!-- ================================ TOAST ================================= -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+    <span class="toast-ico" aria-hidden="true">✝</span>
+    <span class="toast-txt" id="toastTexto"></span>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
