@@ -1,5 +1,5 @@
 /* Service Worker - Radio JIREH 103.5 FM */
-const CACHE_NAME = 'jireh-pwa-v6';
+const CACHE_NAME = 'jireh-pwa-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,8 @@ const ASSETS = [
   './js/data.js',
   './js/admin.js',
   './js/main.js',
+  './js/temas.js',
+  './js/efectos.js',
   './logo-radio.jpg',
   './radio.jpg',
   './assets/img/favicon.svg',

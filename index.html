@@ -7,7 +7,7 @@
   <title>RADIO JIREH · 103.5 FM · Formosa, Argentina</title>
   <meta name="description"
     content="RADIO JIREH, 103.5 FM de Formosa, Argentina. Radio cristiana online las 24 horas: alabanza, Palabra de Dios, oración y el versículo del día. «Jehová proveerá» (Génesis 22:14).">
-  <meta name="theme-color" content="#070d1f">
+  <meta name="theme-color" content="#070d1f" id="metaColorTema">
   <meta property="og:type" content="website">
   <meta property="og:title" content="RADIO JIREH · 103.5 FM · Formosa">
   <meta property="og:description" content="Radio cristiana online 24 horas · Alabanza, Palabra y oración · «Jehová proveerá»">
@@ -27,8 +27,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:ital,wght@0,600;1,500;1,600&family=Lato:ital,wght@0,400;0,700;1,400&display=swap">
   <link rel="stylesheet" href="css/styles.css">
+  <script>
+    /* Aplica el tema de colores guardado antes de dibujar la página (evita el parpadeo) */
+    try { var temaGuardado = localStorage.getItem('jireh_tema'); if (temaGuardado === 'aurora' || temaGuardado === 'amanecer') { document.documentElement.setAttribute('data-tema', temaGuardado); } } catch (e) {}
+  </script>
 </head>
 
 <body>
@@ -53,6 +57,22 @@
         <span class="clima-mini-ico" id="climaMiniIco" aria-hidden="true">◑</span>
         <span class="clima-mini-temp" id="climaMiniTemp">--°</span>
       </a>
+
+      <div class="barra-bloque tema-bloque">
+        <button type="button" class="tema-btn" id="btnTema" aria-haspopup="true" aria-expanded="false"
+          aria-controls="menuTema" aria-label="Cambiar los colores de la página" title="Colores de la página">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3Z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="14.5" cy="7" r="1.2"/></svg>
+        </button>
+        <div class="tema-menu" id="menuTema" role="menu" aria-label="Colores de la página" hidden>
+          <span class="tema-menu-titulo">Colores</span>
+          <button type="button" class="tema-opcion" role="menuitemradio" aria-checked="true" data-tema="noche">
+            <span class="tema-muestra tema-muestra-noche" aria-hidden="true"></span>Noche dorada</button>
+          <button type="button" class="tema-opcion" role="menuitemradio" aria-checked="false" data-tema="aurora">
+            <span class="tema-muestra tema-muestra-aurora" aria-hidden="true"></span>Aurora real</button>
+          <button type="button" class="tema-opcion" role="menuitemradio" aria-checked="false" data-tema="amanecer">
+            <span class="tema-muestra tema-muestra-amanecer" aria-hidden="true"></span>Amanecer (claro)</button>
+        </div>
+      </div>
 
       <div class="barra-bloque visitas-bloque" title="Visitas contadas en este equipo">
         <span class="visitas-etiqueta">VISITAS DE ESTE EQUIPO</span>
@@ -93,6 +113,8 @@
           </div>
         </div>
       </div>
+
+      <a class="hero-bajar" href="#en-vivo" aria-label="Bajar al reproductor en vivo"><span></span></a>
     </section>
 
     <!-- ============================== EN VIVO ================================ -->
@@ -111,6 +133,7 @@
               <span class="btn-play-ico" id="iconoPlay" aria-hidden="true">▶</span>
               <span class="btn-play-txt" id="textoPlay">ESCUCHAR</span>
             </button>
+            <div class="ecualizador" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
             <div class="repro-estado">
               <span class="repro-led" aria-hidden="true"></span>
               <span class="lcd-estado" id="estadoRepro" role="status" aria-live="polite">DETENIDO</span>
@@ -476,6 +499,8 @@
   <script src="js/data.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/temas.js"></script>
+  <script src="js/efectos.js"></script>
 </body>
 
 </html>
